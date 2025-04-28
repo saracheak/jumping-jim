@@ -1,6 +1,9 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ReadInput {
     public static void main(String[] args) throws FileNotFoundException {
@@ -24,7 +27,6 @@ public class ReadInput {
 //            System.out.println(row);
 //        }
         createAdjList(board, rows, cols);
-
     }
 
     public static void createAdjList(ArrayList<ArrayList<Integer>> board, int rows, int cols){
