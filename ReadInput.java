@@ -6,68 +6,66 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ReadInput {
-    public static void main(String[] args) throws FileNotFoundException {
-        FileInputStream fs = new FileInputStream("small.txt");
+    public static Map<Integer, Node> read(String filename) throws FileNotFoundException {
+        FileInputStream fs = new FileInputStream(filename);
         Scanner scanner = new Scanner(fs);
         int rows = scanner.nextInt();
         int cols = scanner.nextInt();
         scanner.nextLine();
         ArrayList<ArrayList<Integer>> board = new ArrayList<>();
-        while(scanner.hasNextLine()){
+        while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             ArrayList<Integer> row = new ArrayList<>();
             for (int i = 0; i < line.length(); i++) {
-                if(line.charAt(i) != ' '){
+                if (line.charAt(i) != ' ') {
                     row.add(line.charAt(i) - '0');
                 }
             }
             board.add(row);
         }
-//        for(ArrayList<Integer> row : board){
-//            System.out.println(row);
-//        }
-        createAdjList(board, rows, cols);
+        return createAdjList(board, rows, cols);
     }
 
-    public static void createAdjList(ArrayList<ArrayList<Integer>> board, int rows, int cols){
-        Map<Integer, ArrayList<int[]>> adjList = new HashMap<>();
+    public static Map<Integer, Node> createAdjList(ArrayList<ArrayList<Integer>> board, int rows, int cols) {
+        Map<Integer, Node> adjList = new HashMap<>();
 
-        for(int r=0; r<rows; r++){
-            for(int c=0; c<cols; c++){
-                int node = r * cols + c;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                int nodeNumber = r * cols + c;
                 int availableJumps = board.get(r).get(c);
-                adjList.put(node, new ArrayList<>());
+                Node current = new Node(nodeNumber, availableJumps, r, c, new ArrayList<>());
+                adjList.put(nodeNumber, current);
+            }
+        }
 
-                //down
-                if(r+availableJumps < rows){
-                    int[] availNode = {r+availableJumps, c};
-                    adjList.get(node).add(availNode);
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                int nodeNumber = r * cols + c;
+                Node current = adjList.get(nodeNumber);
+                int availableJumps = current.value;
+
+                // down
+                if (r + availableJumps < rows) {
+                    int neighborNumber = (r + availableJumps) * cols + c;
+                    current.addReachableNode(adjList.get(neighborNumber));
                 }
-                //up
-                if(r-availableJumps >= 0){
-                    int[] availNode = {r-availableJumps, c};
-                    adjList.get(node).add(availNode);
+                // up
+                if (r - availableJumps >= 0) {
+                    int neighborNumber = (r - availableJumps) * cols + c;
+                    current.addReachableNode(adjList.get(neighborNumber));
                 }
-                //right
-                if(c+availableJumps < cols){
-                    int[] availNode = {r, c+availableJumps};
-                    adjList.get(node).add(availNode);
+                // right
+                if (c + availableJumps < cols) {
+                    int neighborNumber = r * cols + (c + availableJumps);
+                    current.addReachableNode(adjList.get(neighborNumber));
                 }
-                //left
-                if(c-availableJumps >= 0){
-                    int[] availNode = {r, c-availableJumps};
-                    adjList.get(node).add(availNode);
+                // left
+                if (c - availableJumps >= 0) {
+                    int neighborNumber = r * cols + (c - availableJumps);
+                    current.addReachableNode(adjList.get(neighborNumber));
                 }
             }
         }
-//        for (Map.Entry<Integer, ArrayList<int[]>> entry : adjList.entrySet()) {
-//            int node = entry.getKey();
-//            ArrayList<int[]> neighbors = entry.getValue();
-//            System.out.print("Node " + node + " -> ");
-//            for (int[] n : neighbors) {
-//                System.out.print(Arrays.toString(n) + " ");
-//            }
-//            System.out.println();
-//        }
+        return adjList;
     }
 }
