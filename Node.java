@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 
 public class Node {
-    /*
-    @param nodeNumber = the flattened node number between 0-(rows*col-1)
-    @param value = how far jim can jump from this node
-    @param row = this node's row index
-    @param col = this node's col index
-    @param reachableNodes = arraylist of other nodes reachable by this node
+    /**
+     * @param nodeNumber the flattened node number between 0-(rows*col-1)
+     * @param value how far jim can jump from this node
+     * @param row this node's row index
+     * @param col this node's col index
+     * @param reachableNodes arrayList of other nodes reachable by this node
      */
     int nodeNumber;
     int value;
