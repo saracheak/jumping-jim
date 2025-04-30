@@ -2,7 +2,6 @@ import java.util.Queue;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.LinkedList;
-import java.util.HashMap;
 import java.util.Collections;
 
 public class Algorithm {
@@ -18,8 +17,8 @@ public class Algorithm {
         //visited bool array to keep track of which nodes we have visited
         boolean[] visited = new boolean[adjList.size()];
         
-        //parent map so we can keep track of our path
-        Map<Node, Node> parent = new HashMap<>();
+        //ArrayList path keeps track of the nodes we visited in order
+        ArrayList<Node> path = new ArrayList<>();
 
         //put startNode to queue and mark as visited
         Node startNode = adjList.get(0);
@@ -33,7 +32,7 @@ public class Algorithm {
             Node current = queue.poll();
 
             //if we have reached the endNode, break
-            if (current.row == endNode.row && current.col == endNode.col) {
+            if (current.equals(endNode)) {
                 break;
             }
 
@@ -41,25 +40,29 @@ public class Algorithm {
             for (Node reachableNode : adjList.get(current.nodeNumber).reachableNodes) {
                 if (!visited[reachableNode.nodeNumber]) { //for each reachableNode, if we haven't visited it before
                     visited[reachableNode.nodeNumber] = true;   //mark it as visited
-                    parent.put(reachableNode, current);         //put it in the parent
+                    reachableNode.parent = current;
                     queue.offer(reachableNode);                 //enqueue reachableNode
                 }
             }
         }
 
-        if (!parent.containsKey(endNode)) {
-            return new ArrayList<>();
+        //now we need to construct the path
+        //since we kept track of the parent, we need to construct the path from endNode -> startNode
+
+        //add endNode to path ArrayList
+        Node current = endNode;
+        path.add(current);
+
+        //while the currentNode has a parent, we add the parent to the path and set currentNode to parent
+        while(current.parent != null){
+            path.add(current.parent);
+            current = current.parent;
         }
 
-        ArrayList<Node> path = new ArrayList<>();
-        Node current = endNode;
-        while (current != startNode) {
-            path.add(current);
-            current = parent.get(current);
-        }
-        path.add(startNode);
+        //since we constructed the path from endNode -> startNode we need to reverse it
         Collections.reverse(path);
 
+        //convert path to directions
         return nodeNumberToDirection(path);
     }
 
@@ -83,21 +86,21 @@ public class Algorithm {
             if (next.row == prev.row) {
                 //if next Node is to the right of previous Node, direction is E
                 if (next.col > prev.col) {
-                    directions.add("E");
+                    directions.add("E ");
                 }
                 //if next Node is to the left of previous Node, direction is W
                 else {
-                    directions.add("W");
+                    directions.add("W ");
                 }
             //if our next Node is on the same column as previous Node, the direction is S or N
             } else if (next.col == prev.col) {
                 //if next Node is below the previous Node, direction is S
                 if (next.row > prev.row) {
-                    directions.add("S");
+                    directions.add("S ");
                 }
                 //if next Node is above the previous Node, direction is N
                 else {
-                    directions.add("N");
+                    directions.add("N ");
                 }
             }
         }

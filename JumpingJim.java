@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+//TODO: can we assume input is correct
+
 public class JumpingJim {
     public static void main(String[] args) throws IOException {
         //read input and put into adjacency list
@@ -15,7 +17,6 @@ public class JumpingJim {
         FileOutputStream fs = new FileOutputStream("output.txt");
         for (String direction : path) {
             fs.write(direction.getBytes());
-            fs.write(' ');
         }
     }
 }

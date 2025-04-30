@@ -51,7 +51,7 @@ public class ReadInput {
                 int availableJumps = board.get(r).get(c);
 
                 //create the node
-                Node current = new Node(nodeNumber, availableJumps, r, c, new ArrayList<>());
+                Node current = new Node(nodeNumber, availableJumps, r, c, new ArrayList<>(), null);
 
                 //put node into the map's value at map's key which corresponds to the current nodeNumber
                 adjList.put(nodeNumber, current);
